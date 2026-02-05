@@ -1,11 +1,16 @@
 package Items;
 
+import Entities.GameCharacter;
+
 public abstract class Potion extends Item {
 
-    private final String effect;
+    /*
+    * Эффект зелья, например +10 к чему-либо или -10 к чему-либо
+    * */
+    private int effect;
 
-    public Potion(String title, String effect) {
-        super(title);
-        this.effect = effect;
+    public Potion(String title, int effect, int price) {
+        super(title, price);
     }
+
 }
