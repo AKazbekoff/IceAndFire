@@ -1,5 +1,7 @@
 package Entities;
 
+import Common.DamageDealt;
+
 public abstract class Entity {
 
     private final String name; // Имя сущности
@@ -10,8 +12,8 @@ public abstract class Entity {
     private int level; // Уровень сущности
 
     /*
-    * Конструктор сущности по умолчанию.
-    * */
+     * Конструктор сущности по умолчанию.
+     * */
     public Entity(String name) {
         this.name = name;
         this.hp = 100;
@@ -22,8 +24,8 @@ public abstract class Entity {
     }
 
     /*
-    * Конструктор для пользовательской конфигурации сущности (используется для создания монстров)
-    * */
+     * Конструктор для пользовательской конфигурации сущности (используется для создания монстров)
+     * */
     public Entity(String name, int hp, int maxHp, int power, int dexterity, int level) {
         this.name = name;
         this.hp = hp;
@@ -33,14 +35,40 @@ public abstract class Entity {
         this.level = level;
     }
 
-    /*
-     * Метод нанесения урона: в качестве аргумента принимает сущность, которую атакуют.
-     * Возвращает значение, сколько на самом деле было нанесено урона.
-     * */
-    public abstract int dealDamage(Entity anotherEntity);
+    /**
+     * Классический расчет урона: сила + зависимость от уровня здоровья.
+     * Ловкость определяет верхнюю границу, при котором будет удар считаться успешным.
+     * Так, если ловкость = 50, а случайное сгенерированное число 67, то удар считается не удачным, что означает,
+     * что герой промахнулся и было нанесено 0 урона. В обратном случае герой наносит полный рассчитанный размер урона.
+     */
+    public int dealDamage(Entity anotherEntity) {
+        int damage = (int) (getPower() * (hp / 100.0) + 1);
+        DamageDealt damageDealt = new DamageDealt(null, damage);
 
-    /*
+        return anotherEntity.takeDamage(damageDealt);
+    }
+
+    /**
      * Метод получения урона. Возвращает значение, сколько на самом деле было получено урона.
      * */
-    public abstract int takeDamage();
+    protected int takeDamage(DamageDealt damageDealt) {
+        setHp(Math.max(0, hp - damageDealt.getDamage()));
+        return damageDealt.getDamage();
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    protected void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    protected int getPower() {
+        return power;
+    }
 }
