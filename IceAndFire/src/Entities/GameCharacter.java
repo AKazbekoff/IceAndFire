@@ -1,6 +1,7 @@
 package Entities;
 
 import Common.DamageDealt;
+import Common.Strategy;
 import Items.Item;
 import Items.Potion;
 import Items.Potions.HealingPotion;
@@ -60,6 +61,7 @@ public class GameCharacter extends Entity {
         }
 
         int damage = (int) ((getPower() + weaponPower) * (getHp() / 100.0) + 1);
+        //TODO учесть ловкость
         DamageDealt damageDealt = new DamageDealt(leadingHand, damage);
 
         return anotherEntity.takeDamage(damageDealt);
@@ -79,7 +81,7 @@ public class GameCharacter extends Entity {
 
     /**
      * Печатает содержимое рюкзака с привязкой по индексу
-     * */
+     */
     public void printBackpack() {
         StringBuilder sb = new StringBuilder("Содержимое рюкзака:\n");
         for (int i = 0; i < backpack.size(); i++) {
@@ -93,7 +95,7 @@ public class GameCharacter extends Entity {
     /**
      * Метод смены предмета в руке героя. Меняет выбранный предмет и текущий предмет в руке местами в памяти.
      * Используется командой "Взять + индекс".
-     * */
+     */
     public void swap(int selectedItemIndex) {
         if (selectedItemIndex >= backpack.size() || selectedItemIndex < 0) {
             throw new IllegalArgumentException("Не существует предмета в рюкзаке с таким индексом!");
@@ -102,5 +104,37 @@ public class GameCharacter extends Entity {
         Item selectedItem = backpack.get(selectedItemIndex);
         backpack.set(selectedItemIndex, leadingHand);
         leadingHand = selectedItem;
+    }
+
+    /**
+     * Метод накопления опыта. Накапливает до достижения границы уровня.
+     * При достижении границы уровня предлагает игроку выбрать повышение.
+     */
+    public void gainExperience(int experience) {
+        if (experience < 0) {
+            throw new IllegalArgumentException("Experience can not be less then 0");
+        }
+        if (experience + currentExperience >= 100) {
+            int levelsToUp = experience + currentExperience / 100;
+            int remain = (experience + currentExperience) % 100;
+
+            for (int i = 0; i < levelsToUp; i++) {
+                int increaseType = Strategy.activityIncreaseLevel(getLevel());
+                switch (increaseType) {
+                    case Strategy.INCREASE_TYPE_HP -> setMaxHp((int) (getMaxHp() * 1.1)); // +10% к уровню здоровья
+
+                    case Strategy.INCREASE_TYPE_DEXTERITY -> setDexterity((int) (getDexterity() * 1.05)); // +5% к ловкости
+
+                    case Strategy.INCREASE_TYPE_POWER -> setPower((int) (getPower() * 1.1)); // +10% к базовой силе
+
+                    default -> throw new RuntimeException("Unprocessed increase type: " + increaseType);
+
+                }
+                increaseLevel();
+                totalExperience = (int) (totalExperience * 1.25); // +25% к потолку опыта
+            }
+        } else {
+            currentExperience += experience;
+        }
     }
 }
