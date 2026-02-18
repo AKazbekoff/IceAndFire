@@ -50,7 +50,7 @@ public abstract class Entity {
 
     /**
      * Метод получения урона. Возвращает значение, сколько на самом деле было получено урона.
-     * */
+     */
     protected int takeDamage(DamageDealt damageDealt) {
         setHp(Math.max(0, hp - damageDealt.getDamage()));
         return damageDealt.getDamage();
@@ -64,11 +64,35 @@ public abstract class Entity {
         return maxHp;
     }
 
+    protected void setMaxHp(int hp) {
+        maxHp = hp;
+    }
+
     protected void setHp(int hp) {
         this.hp = hp;
     }
 
-    protected int getPower() {
+    public int getPower() {
         return power;
+    }
+
+    protected void setPower(int power) {
+        this.power = power;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    protected void increaseLevel() {
+        level += 1;
+    }
+
+    public int getDexterity() {
+        return dexterity;
+    }
+
+    protected void setDexterity(int dexterity) {
+        this.dexterity = dexterity;
     }
 }
