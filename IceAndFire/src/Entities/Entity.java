@@ -2,6 +2,8 @@ package Entities;
 
 import Common.DamageDealt;
 
+import java.util.Random;
+
 public abstract class Entity {
 
     private final String name; // Имя сущности
@@ -39,11 +41,16 @@ public abstract class Entity {
      * Классический расчет урона: сила + зависимость от уровня здоровья.
      * Ловкость определяет верхнюю границу, при котором будет удар считаться успешным.
      * Так, если ловкость = 50, а случайное сгенерированное число 67, то удар считается не удачным, что означает,
-     * что герой промахнулся и было нанесено 0 урона. В обратном случае герой наносит полный рассчитанный размер урона.
+     * что сущность промахнулась и было нанесено 0 урона. В обратном случае сущность наносит полный рассчитанный размер урона.
      */
     public int dealDamage(Entity anotherEntity) {
+        DamageDealt damageDealt;
         int damage = (int) (getPower() * (hp / 100.0) + 1);
-        DamageDealt damageDealt = new DamageDealt(null, damage);
+        if (dexterity >= 100 || dexterity >= (new Random().nextInt(0, 100))) {
+            damageDealt = new DamageDealt(null, damage);
+        } else {
+            damageDealt = new DamageDealt(null, 0);
+        }
 
         return anotherEntity.takeDamage(damageDealt);
     }

@@ -9,6 +9,7 @@ import Items.Weapon;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameCharacter extends Entity {
 
@@ -60,9 +61,13 @@ public class GameCharacter extends Entity {
             weaponPower = ((Weapon) leadingHand).getPower();
         }
 
+        DamageDealt damageDealt;
         int damage = (int) ((getPower() + weaponPower) * (getHp() / 100.0) + 1);
-        //TODO учесть ловкость
-        DamageDealt damageDealt = new DamageDealt(leadingHand, damage);
+        if (getDexterity() >= 100 || getDexterity() >= (new Random().nextInt(0, 100))) {
+            damageDealt = new DamageDealt(leadingHand, damage);
+        } else {
+            damageDealt = new DamageDealt(leadingHand, 0);
+        }
 
         return anotherEntity.takeDamage(damageDealt);
     }
