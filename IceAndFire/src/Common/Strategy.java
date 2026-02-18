@@ -21,7 +21,7 @@ public class Strategy {
      * Повышает уровень игрока, предлагая ему 3 варианта повышения
      */
     public static int activityIncreaseLevel(int currentLevel) {
-        String increaseMessage = "\tДоступно повышение! Текущий уровень:" + currentLevel + "\n" +
+        String increaseMessage = "Доступно повышение! Текущий уровень:" + currentLevel + "\n" +
                 "[0] +10% к максимальному уровню здоровья\n" +
                 "[1] +5% к ловкости\n" +
                 "[2] +10% к базовой силе персонажа\n";
