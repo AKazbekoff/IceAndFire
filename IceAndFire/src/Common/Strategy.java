@@ -1,5 +1,7 @@
 package Common;
 
+import Items.Item;
+import java.util.List;
 import java.util.Scanner;
 
 public class Strategy {
@@ -41,6 +43,28 @@ public class Strategy {
                 printlnText("Некорректный тип повышения! Доступные варианты указаны в скобках перед описанием повышения выше");
             }
         }
+    }
+
+    public static void activityPrintBackpack(List<Item> backpack) {
+        StringBuilder sb = new StringBuilder("Содержимое рюкзака:\n");
+        for (int i = 0; i < backpack.size(); i++) {
+            Item item = backpack.get(i);
+            sb.append("[").append(i).append("]\t").append(item.getTitle()).append("\t").append(item.getPrice()).append("$\n");
+        }
+
+        printlnText(sb.toString());
+    }
+
+    public static void activityPrintCurrentLeadingHand(Item item) {
+        printlnText("Выбрано \"" + item.getTitle() + "\"");
+    }
+
+    public static void activityPrintCurrentHP(int hp) {
+        printlnText("Здоровье: " + hp);
+    }
+
+    public static void activityPrintError(String msg) {
+        printlnText(msg);
     }
 
     /**
