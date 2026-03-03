@@ -21,12 +21,13 @@ public class Direwolf extends Entity {
 
     /**
      * Рассекающий удар. Наносит очень сильный урон, уменьшает здоровье атакованной сущности на (level * 10)%, максимум 50%.
+     * Является специализированной атакой, не зависит от уровня здоровья.
      * Возвращает сколько урона было нанесено.
      */
-    public int slashingBlow(Entity entity) {
+    public int slashingBlowAttack(Entity entity) {
         int level = Math.min(getLevel(), 5); // Ограничиваем максимумом
         int percent = Math.min(level * 10, 50); // level * 10%, но не больше 50%
-        int damage = (int) (entity.getHp() * (percent / 100.0));
+        int damage = (int) (entity.getMaxHp() * (percent / 100.0));
 
         DamageDealt damageDealt = new DamageDealt(null, damage);
         return entity.takeDamage(damageDealt);
@@ -34,11 +35,12 @@ public class Direwolf extends Entity {
 
     /**
      * Атака рывком. Наносит 30% от здоровья урона при уровне монстра < 5 и 50% при уровне >= 5.
+     * Является специализированной атакой, не зависит от уровня здоровья.
      * Возвращает сколько урона было нанесено.
      * */
     public int dashAttack(Entity entity) {
         int damagePercent = (getLevel() < 5) ? 30 : 50;
-        int damage = (int) (entity.getHp() * (damagePercent / 100.0));
+        int damage = (int) (entity.getMaxHp() * (damagePercent / 100.0));
 
         DamageDealt damageDealt = new DamageDealt(null, damage);
         return entity.takeDamage(damageDealt);
