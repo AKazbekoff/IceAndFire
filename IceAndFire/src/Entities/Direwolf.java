@@ -31,4 +31,16 @@ public class Direwolf extends Entity {
         DamageDealt damageDealt = new DamageDealt(null, damage);
         return entity.takeDamage(damageDealt);
     }
+
+    /**
+     * Атака рывком. Наносит 30% от здоровья урона при уровне монстра < 5 и 50% при уровне >= 5.
+     * Возвращает сколько урона было нанесено.
+     * */
+    public int dashAttack(Entity entity) {
+        int damagePercent = (getLevel() < 5) ? 30 : 50;
+        int damage = (int) (entity.getHp() * (damagePercent / 100.0));
+
+        DamageDealt damageDealt = new DamageDealt(null, damage);
+        return entity.takeDamage(damageDealt);
+    }
 }
