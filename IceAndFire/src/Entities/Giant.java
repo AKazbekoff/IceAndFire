@@ -1,0 +1,59 @@
+package Entities;
+
+import Common.DamageDealt;
+
+public class Giant extends Entity {
+
+    /**
+     * Конструктор "Великана" зависимый на уровне сущности.
+     * Обладает крайне высокой базовой силой и уровнем здоровья. При этом при повышении уровня эти параметры вырастают.
+     * Однако обладает крайне низкой ловкостью, при этом с повышением уровня этот параметр уменьшается
+     */
+    public Giant(int level) {
+        super(
+                "Великан",
+                200 + 50 * level,
+                200 + 50 * level,
+                85 + 20 * level,
+                20 - level,
+                level
+        );
+    }
+
+    /**
+     * Атака "Капкан". Фатальна для любой сущности угодившей в эту атаку. Великан откусывает голову, убивая тем самым
+     * моментально.
+     * Является специализированной атакой, не зависит от уровня здоровья.
+     * Возвращает сколько урона было нанесено.
+     */
+    public int trapAttack(Entity entity) {
+        DamageDealt damageDealt = new DamageDealt(null, entity.getMaxHp());
+        return entity.takeDamage(damageDealt);
+    }
+
+    /**
+     * Атака "Молот". В зависимости от уровня сущности наносит 20%, 30%, 40%, 50%, максимально 60% урона от уровня
+     * здоровья атакованной сущности.
+     * Является специализированной атакой, не зависит от уровня здоровья.
+     * Возвращает сколько урона было нанесено.
+     */
+    public int hummerAttack(Entity entity) {
+        int level = Math.min(getLevel(), 5); // Ограничиваем максимумом
+        int percent = Math.min(level * 10 + 10, 60); // (level * 10 + 10)%, но не больше 50%
+        int damage = (int) (entity.getMaxHp() * (percent / 100.0));
+
+        DamageDealt damageDealt = new DamageDealt(null, damage);
+        return entity.takeDamage(damageDealt);
+    }
+
+    /**
+     * Атака "Хлопок". Наносит небольшое количество урона.
+     * TODO: реализовать систему накопления эффектов у игрового персонажа. Метод должен уменьшать ловкость на 30% на 5 ходов.
+     * Является специализированной атакой, не зависит от уровня здоровья.
+     * Возвращает сколько урона было нанесено.
+     */
+    public int swatAttack(Entity entity) {
+        DamageDealt damageDealt = new DamageDealt(null, 20);
+        return entity.takeDamage(damageDealt);
+    }
+}
