@@ -20,7 +20,7 @@ public abstract class Entity {
         this.name = name;
         this.hp = 100;
         this.maxHp = hp;
-        this.power = 5;
+        this.power = 20;
         this.dexterity = 50;
         this.level = 1;
     }
