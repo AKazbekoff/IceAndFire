@@ -54,9 +54,23 @@ public class GameCharacter extends Entity {
 
     /**
      * Возвращает максимальный размер содержимого рюкзака.
-     * */
+     */
     public int getBackpackLimit() {
         return backpackLimit;
+    }
+
+    /**
+     * Возвращает количество монет
+     * */
+    public int getCoinsAmount() {
+        return coins;
+    }
+
+    /**
+     * Изменяет текущее количество монет на переданный аргумент
+     */
+    public void addCoins(int amount) {
+        coins += amount;
     }
 
     /**
