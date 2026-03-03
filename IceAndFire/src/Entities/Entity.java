@@ -26,9 +26,13 @@ public abstract class Entity {
     }
 
     /*
-     * Конструктор для пользовательской конфигурации сущности (используется для создания монстров)
+     * Конструктор для пользовательской конфигурации сущности
      * */
     public Entity(String name, int hp, int maxHp, int power, int dexterity, int level) {
+        if (level < 1) {
+            throw new IllegalArgumentException("Level can not be less then 1");
+        }
+
         this.name = name;
         this.hp = hp;
         this.maxHp = maxHp;
