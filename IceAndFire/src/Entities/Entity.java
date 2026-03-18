@@ -1,6 +1,7 @@
 package Entities;
 
 import Common.DamageDealt;
+import Items.Item;
 
 import java.util.Random;
 
@@ -56,6 +57,25 @@ public abstract class Entity {
             damageDealt = new DamageDealt(null, 0);
         }
 
+        return anotherEntity.takeDamage(damageDealt);
+    }
+
+    /**
+     * Метод нанесения урона сущности специализированными атаками сущностей.
+     * Наносит уже рассчитанный урон.
+     * Возвращает сколько урона на самом деле было нанесено.
+     * */
+    public int dealDamage(Entity anotherEntity, int damage) {
+        return dealDamage(anotherEntity, damage, null);
+    }
+
+    /**
+     * Метод нанесения урона сущности специализированными атаками сущностей.
+     * Наносит уже рассчитанный урон. Принимает так же в качестве аргумента предмет, которым был нанесен удар.
+     * Возвращает сколько урона на самом деле было нанесено.
+     * */
+    public int dealDamage(Entity anotherEntity, int damage, Item item) {
+        DamageDealt damageDealt = new DamageDealt(item, damage);
         return anotherEntity.takeDamage(damageDealt);
     }
 
