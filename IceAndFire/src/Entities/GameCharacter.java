@@ -2,6 +2,7 @@ package Entities;
 
 import Common.DamageDealt;
 import Common.Strategy;
+import Effects.Effect;
 import Items.Item;
 import Items.Potions.HealingPotion;
 import Items.Weapon;
@@ -34,7 +35,12 @@ public class GameCharacter extends Entity {
     /*
      * Лимит предметов в рюкзаке. По умолчанию 8
      * */
-    private int backpackLimit = 20;
+    private int backpackLimit = 8;
+
+    /*
+    * Массив активных эффектов
+    * */
+    private ArrayList<Effect> activeEffects = new ArrayList<>();
 
     /*
      * Монеты персонажа. На них он может покупать у торговца амуницию
@@ -89,7 +95,17 @@ public class GameCharacter extends Entity {
 
         DamageDealt damageDealt;
         int damage = (int) ((getPower() + weaponPower) * (getHp() / 100.0) + 1);
-        if (getDexterity() >= 100 || getDexterity() >= (new Random().nextInt(0, 100))) {
+
+        // Применяем активные эффекты, которые могут повлиять на расчет урона.
+        int currentDexterity = getDexterity();
+        for (Effect effect : activeEffects) {
+            if (effect.getType() == Effect.EFFECT_LOW_DEXTERITY) {
+                // Применяем эффект на ловкость в размере effectAmount выраженного в процентах, округляя до целого числа
+                currentDexterity = (int) (currentDexterity * (1 - (effect.getAmount() / 100.0)));
+            }
+        }
+
+        if (currentDexterity >= 100 || currentDexterity >= (new Random().nextInt(0, 100))) {
             damageDealt = new DamageDealt(leadingHand, damage);
         } else {
             damageDealt = new DamageDealt(leadingHand, 0);
@@ -113,6 +129,16 @@ public class GameCharacter extends Entity {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Применяет эффект на пользователя.
+     * Имеет выраженный длительный характер.
+     * Может быть нанесен другими сущностями.
+     * Результат эффектов применяется на каждом ходу перед ключевым действием, пока срок действия эффекта не окончен.
+     * */
+    public void applyEffect(Effect effect) {
+        activeEffects.add(effect);
     }
 
     /**
@@ -164,6 +190,21 @@ public class GameCharacter extends Entity {
             }
         } else {
             currentExperience += experience;
+        }
+    }
+
+    /**
+     * Пересчитывает активные эффекты. Если время вышло - удаляет эффект из коллекции.
+     * */
+    public void recalculateEffects() {
+
+        var iterator = activeEffects.iterator();
+        while (iterator.hasNext()) {
+            var effect = iterator.next();
+            effect.decrementDuration();
+            if (effect.getDuration() <= 0) {
+                iterator.remove();
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 package Entities;
 
+import Common.DamageDealt;
+
 public class Wolf extends Entity {
 
     /**
@@ -17,5 +19,11 @@ public class Wolf extends Entity {
         );
     }
 
-    //TODO: продумать специализированные атаки для этой сущности.
+    /**
+     * Сильный укус. Наносит удвоенный размер урона (от базовой силы сущности).
+     * Возвращает сколько урона на самом деле было нанесено.
+     * */
+    public int strongBiteAttack(Entity entity) {
+        return dealDamage(entity, getPower() * 2);
+    }
 }

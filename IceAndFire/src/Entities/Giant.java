@@ -1,6 +1,7 @@
 package Entities;
 
 import Common.DamageDealt;
+import Effects.Effect;
 
 public class Giant extends Entity {
 
@@ -27,8 +28,7 @@ public class Giant extends Entity {
      * Возвращает сколько урона было нанесено.
      */
     public int trapAttack(Entity entity) {
-        DamageDealt damageDealt = new DamageDealt(null, entity.getMaxHp());
-        return entity.takeDamage(damageDealt);
+        return dealDamage(entity, entity.getMaxHp());
     }
 
     /**
@@ -42,18 +42,19 @@ public class Giant extends Entity {
         int percent = Math.min(level * 10 + 10, 60); // (level * 10 + 10)%, но не больше 50%
         int damage = (int) (entity.getMaxHp() * (percent / 100.0));
 
-        DamageDealt damageDealt = new DamageDealt(null, damage);
-        return entity.takeDamage(damageDealt);
+        return dealDamage(entity, damage);
     }
 
     /**
      * Атака "Хлопок". Наносит небольшое количество урона.
-     * TODO: реализовать систему накопления эффектов у игрового персонажа. Метод должен уменьшать ловкость на 30% на 5 ходов.
      * Является специализированной атакой, не зависит от уровня здоровья.
+     * Если атакует пользователя, наносит на игрока эффект снижения ловкости на 5 ходов в размере 30%.
      * Возвращает сколько урона было нанесено.
      */
     public int swatAttack(Entity entity) {
-        DamageDealt damageDealt = new DamageDealt(null, 20);
-        return entity.takeDamage(damageDealt);
+        if (entity instanceof GameCharacter) {
+            ((GameCharacter) entity).applyEffect(new Effect(Effect.EFFECT_LOW_DEXTERITY, 5, 30));
+        }
+        return dealDamage(entity, 20);
     }
 }

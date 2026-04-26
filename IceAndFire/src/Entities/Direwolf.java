@@ -29,8 +29,7 @@ public class Direwolf extends Entity {
         int percent = Math.min(level * 10, 50); // level * 10%, но не больше 50%
         int damage = (int) (entity.getMaxHp() * (percent / 100.0));
 
-        DamageDealt damageDealt = new DamageDealt(null, damage);
-        return entity.takeDamage(damageDealt);
+        return dealDamage(entity, damage);
     }
 
     /**
@@ -42,7 +41,6 @@ public class Direwolf extends Entity {
         int damagePercent = (getLevel() < 5) ? 30 : 50;
         int damage = (int) (entity.getMaxHp() * (damagePercent / 100.0));
 
-        DamageDealt damageDealt = new DamageDealt(null, damage);
-        return entity.takeDamage(damageDealt);
+        return dealDamage(entity, damage);
     }
 }
